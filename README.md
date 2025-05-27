@@ -1,54 +1,23 @@
-# React + TypeScript + Vite
+# README
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🪝Git хуки в проекте
 
-Currently, two official plugins are available:
+В этом репозитории настроены git-хуки через [Husky](https://typicode.github.io/husky/get-started.html). Они автоматически запускают проверки перед коммитом:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✅ [Prettier](https://prettier.io/docs/) — автоформатирование
+- ✅ [TypeScript](https://scriptdev.ru/) — проверка типов
+- ✅ [ESLint](https://eslint.org/docs/latest/use/getting-started) — проверка качества кода JavaScript. В этом проекте используются расширенные правила от airbnb. Список можно найти в папке .eslint_rules
+- ✅ [Steiger с правилами FSD](https://github.com/feature-sliced/steiger/tree/master) — проверка кода на соответствие FSD архитектуре
+- ✅ [Conventional commits](https://www.conventionalcommits.org/ru/v1.0.0-beta.4/) — проверка сообщений коммитов на соответствие Conventional commits соглашению
 
-## Expanding the ESLint configuration
+**Что происходит при коммите**
+Перед каждым коммитом автоматически запускаются команды:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+npx pretty-quick --staged # не вызывает ошибок, молча форматирует код
+npx tsc --noEmit --project ./tsconfig.app.json # может показывать ошибки
+node scripts/lint-staged.cjs # может показывать ошибки
+npx steiger ./src # может показывать ошибки
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Если есть ошибки, коммит будет отклонён, и ты увидишь сообщения об ошибках в терминале или IDE.
