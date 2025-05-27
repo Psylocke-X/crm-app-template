@@ -1,3 +1,4 @@
 #!/bin/sh
 npx pretty-quick --staged
 node scripts/lint-staged.cjs
+npx steiger ./src
